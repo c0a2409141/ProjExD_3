@@ -103,7 +103,6 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 
-# ### 追加 ###
 class Explosion:
     """
     爆発エフェクトを表現するクラス
@@ -146,7 +145,7 @@ def main():
     bird = Bird((300, 200))
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     beams = []
-    explosions = [] # ### 追加 ### 爆発エフェクト用のリスト
+    explosions = [] # 爆発エフェクト用のリスト
     score = Score()
     clock = pg.time.Clock()
     tmr = 0
@@ -171,7 +170,7 @@ def main():
             for j, bomb in enumerate(bombs):
                 if beam is not None and bomb is not None:
                     if beam.rct.colliderect(bomb.rct):
-                        # ### 追加 ### 爆発インスタンスを生成
+                        # 爆発インスタンスを生成
                         explosions.append(Explosion(bomb, 50))
                         
                         beams[i] = None
@@ -179,7 +178,7 @@ def main():
                         score.score_up(1)
                         bird.change_img(6, screen)
 
-        # ### 変更 ### リストのクリーンアップ
+        # リストのクリーンアップ
         bombs = [bomb for bomb in bombs if bomb is not None]
         beams = [beam for beam in beams if beam is not None and check_bound(beam.rct)[0]]
         explosions = [exp for exp in explosions if exp.life > 0] # lifeが0より大きいものだけ残す
@@ -190,7 +189,7 @@ def main():
             bomb.update(screen)
         for beam in beams:
             beam.update(screen)
-        for exp in explosions: # ### 追加 ### 爆発エフェクトを描画
+        for exp in explosions: # 爆発エフェクトを描画
             exp.update(screen)
         score.update(screen)
         pg.display.update()
