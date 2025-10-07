@@ -190,6 +190,7 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
 
     beam = None  # ゲーム初期化時にはビームは存在しない
+    beams = []  # ビームを複数管理するリスト
     score = Score()  # Scoreインスタンスの生成
     clock = pg.time.Clock()
     tmr = 0
@@ -198,8 +199,8 @@ def main():
             if event.type == pg.QUIT:
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                # スペースキー押下でBeamクラスのインスタンス生成
-                beam = Beam(bird)            
+                # スペースキー押下でBeamインスタンスをリストに追加
+                beams.append(Beam(bird))            
         screen.blit(bg_img, [0, 0])
         
         for bomb in bombs:
@@ -210,21 +211,27 @@ def main():
                 time.sleep(1)
                 return
         
-        for b, bomb in enumerate(bombs):
-            if beam is not None:
-                if beam.rct.colliderect(bomb.rct):
-                    # ビームと爆弾の衝突判定
-                    beam, bombs[b] = None, None
-                    bird.change_img(6, screen)
-                    score.score_up(1)  # スコアを1点アップ
+        for i, beam in enumerate(beams):
+            for j, bomb in enumerate(bombs):
+                if beam is not None and bomb is not None:
+                    if beam.rct.colliderect(bomb.rct):
+                        # 衝突したら、ビームと爆弾をNoneにする
+                        beams[i] = None
+                        bombs[j] = None
+                        score.score_up(1)  # スコアを1点アップ
+                        bird.change_img(6, screen)
+
+        # Noneでないものだけを残し、画面外に出たビームを削除
         bombs = [bomb for bomb in bombs if bomb is not None]
+        beams = [beam for beam in beams if beam is not None and check_bound(beam.rct)[0]]
 
         key_lst = pg.key.get_pressed()
-        bird.update(key_lst, screen)
-        if beam is not None:
-            beam.update(screen)   
+        bird.update(key_lst, screen) 
         for bomb in bombs:
             bomb.update(screen)
+        for beam in beams:
+            beam.update(screen)  # 複数のビームを描画
+
         score.update(screen)  # スコアを描画
         pg.display.update()
         tmr += 1
