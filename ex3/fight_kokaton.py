@@ -144,8 +144,8 @@ def main():
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
-    beams = []
-    explosions = []
+    beams = []  # ビーム用のリスト
+    explosions = []  # 爆発エフェクト用のリスト
     score = Score()
     clock = pg.time.Clock()
     tmr = 0
