@@ -2,7 +2,7 @@ import os
 import random
 import sys
 import time
-import math  # ### 追加 ###
+import math
 import pygame as pg
 
 
@@ -45,7 +45,7 @@ class Bird:
         self.img = __class__.imgs[(+5, 0)]
         self.rct: pg.Rect = self.img.get_rect()
         self.rct.center = xy
-        self.dire = (+5, 0)  # ### 追加 ### こうかとんの向き
+        self.dire = (+5, 0)  # こうかとんの向き
 
     def change_img(self, num: int, screen: pg.Surface):
         self.img = pg.transform.rotozoom(pg.image.load(f"fig/{num}.png"), 0, 0.9)
@@ -62,12 +62,12 @@ class Bird:
             self.rct.move_ip(-sum_mv[0], -sum_mv[1])
         if not (sum_mv[0] == 0 and sum_mv[1] == 0):
             self.img = __class__.imgs[tuple(sum_mv)]
-            self.dire = tuple(sum_mv)  # ### 追加 ### 移動時に向きを更新
+            self.dire = tuple(sum_mv)  # 移動時に向きを更新
         screen.blit(self.img, self.rct)
 
 
 class Beam:
-    # ### 変更 ### Beamクラス全体を修正
+    # Beamクラス全体を修正
     def __init__(self, bird: "Bird"):
         """
         ビーム画像Surfaceを生成する
